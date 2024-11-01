@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import './ApiException.dart';
 
 class ApiClient {
   Future<Response> invokeAPI(String path, String method, Object? body) async {
-
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String accestoken= prefs.getString('token')??"";
+    print('admintoken'+accestoken);
     Map<String, String> headerParams = {};
     Response response;
 
@@ -16,11 +19,20 @@ class ApiClient {
     final nullableHeaderParams = (headerParams.isEmpty) ? null : headerParams;
     print(body);
     switch (method) {
+
+      case "LOGINPOST":
+        response = await post(Uri.parse(url),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: body);
+
+        break;
       case "POST":
         response = await post(Uri.parse(url),
             headers: {
               'Content-Type': 'application/json',
-              "Authorization":"Bearer hkhkl"
+              "Authorization":"Bearer $accestoken"
             },
             body: body);
 
@@ -53,8 +65,8 @@ class ApiClient {
         response = await get(
           Uri.parse(url),
           headers: {
-
-
+            'Content-Type': 'application/json',
+            'Authorization':'Bearer $accestoken'
           },
         );
 

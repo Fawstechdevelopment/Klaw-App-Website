@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:klawapp/Bloc/LoginBloc/login_bloc.dart';
 import 'package:klawapp/UI/Home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Repository/ModelClass/AdminLoginModelClass.dart';
 import '../../ToastMessage.dart';
@@ -17,7 +18,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool passwordVisible = true;
-  TextEditingController emailcontroller = TextEditingController();
+  TextEditingController usernamecontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
   var formkey = GlobalKey<FormState>();
   late AdminLoginModel data;
@@ -85,7 +86,7 @@ class _LoginState extends State<Login> {
                                             : const Color(0xFF009357),
                                         height: 1.9.h,
                                       ),
-                                    )),
+                                    ),),
                           ),
                         ),
                       ],
@@ -135,6 +136,7 @@ class _LoginState extends State<Login> {
                           ToastMessage().toastmessage(message: "Succesfully login");
                           Navigator.of(context).push(
                               MaterialPageRoute(builder: (_) => const Home()));
+                          checkLogin(data.access.toString());
                         }
                       },
                       child: Column(
@@ -159,7 +161,7 @@ class _LoginState extends State<Login> {
                           Padding(
                             padding: EdgeInsets.only(top: 62.h, right: 20.w),
                             child: TextFormField(
-                              controller: emailcontroller,
+                              controller: usernamecontroller,
                               decoration: InputDecoration(
                                   hintText: 'Username',
                                   hintStyle: GoogleFonts.notoSans(
@@ -248,7 +250,7 @@ class _LoginState extends State<Login> {
     final isValid = formkey.currentState?.validate();
     if (isValid!) {
                               BlocProvider.of<LoginBloc>(context).add(FeatchLogin(
-                                  username: emailcontroller.text,
+                                  username: usernamecontroller.text,
                                   password: passwordcontroller.text));
                             }
     formkey.currentState?.save();
@@ -291,5 +293,9 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+  void checkLogin(String token) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('token', token);
   }
 }
