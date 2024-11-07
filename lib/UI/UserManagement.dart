@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Usermanagement extends StatefulWidget {
-  const Usermanagement({super.key});
+  final VoidCallback onBack;
+  const Usermanagement({super.key, required this.onBack});
 
   @override
   State<Usermanagement> createState() => _UsermanagementState();

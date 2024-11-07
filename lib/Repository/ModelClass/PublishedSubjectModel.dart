@@ -30,16 +30,20 @@ class PublishedSubjectModel {
 }
 
 class Published {
+  String? objectId;
   String? title;
   String? courseCode;
   String? university;
   String? description;
-  dynamic file;
+  String? file;
   String? status;
 
-  Published({this.title, this.courseCode, this.university, this.description, this.file, this.status});
+  Published({this.objectId, this.title, this.courseCode, this.university, this.description, this.file, this.status});
 
   Published.fromJson(Map<String, dynamic> json) {
+    if(json["object_id"] is String) {
+      objectId = json["object_id"];
+    }
     if(json["title"] is String) {
       title = json["title"];
     }
@@ -52,7 +56,9 @@ class Published {
     if(json["description"] is String) {
       description = json["description"];
     }
-    file = json["file"];
+    if(json["file"] is String) {
+      file = json["file"];
+    }
     if(json["status"] is String) {
       status = json["status"];
     }
@@ -64,6 +70,7 @@ class Published {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["object_id"] = objectId;
     _data["title"] = title;
     _data["course_code"] = courseCode;
     _data["university"] = university;
@@ -74,13 +81,15 @@ class Published {
   }
 
   Published copyWith({
+    String? objectId,
     String? title,
     String? courseCode,
     String? university,
     String? description,
-    dynamic file,
+    String? file,
     String? status,
   }) => Published(
+    objectId: objectId ?? this.objectId,
     title: title ?? this.title,
     courseCode: courseCode ?? this.courseCode,
     university: university ?? this.university,

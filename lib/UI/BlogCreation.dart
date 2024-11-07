@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Blogcreation extends StatefulWidget {
-  const Blogcreation({super.key});
+  final VoidCallback onBack;
+  const Blogcreation({super.key, required this.onBack});
 
   @override
   State<Blogcreation> createState() => _BlogcreationState();

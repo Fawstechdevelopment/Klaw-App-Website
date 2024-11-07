@@ -45,12 +45,17 @@ class ApiClient {
             body: body);
         break;
       case "DELETE":
-        response = await delete(Uri.parse(url), headers: {}, body: body);
+        response = await delete(Uri.parse(url), headers: {
+          "Authorization":"Bearer $accestoken"
+        }, body: body);
         break;
       case "POST_":
         response = await post(
           Uri.parse(url),
-          headers: {'content-Type': 'application/json'},
+          headers: {
+            'content-Type': 'application/json'
+
+          },
           body: body,
         );
         break;

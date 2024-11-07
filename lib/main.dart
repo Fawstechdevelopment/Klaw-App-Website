@@ -2,17 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:klawapp/Bloc/AddSubject%20Bloc/add_subject_bloc.dart';
+import 'package:klawapp/Bloc/DeleteSubject_Bloc/delete_bloc.dart';
 import 'package:klawapp/Bloc/DraftSubjectBloc/draft_subject_bloc.dart';
 import 'package:klawapp/Bloc/LoginBloc/login_bloc.dart';
 import 'package:klawapp/Bloc/Published%20Subject%20Bloc/published_subject_bloc.dart';
-import 'package:klawapp/UI/Showing%20subject.dart';
+import 'package:klawapp/Bloc/ToggleSubject%20Bloc/toggle_suject_bloc.dart';
 import 'UI/Authentication/Login.dart';
+import 'dart:html' as html;
 
+import 'UI/Home.dart';
 bool draftpage = false;
 bool addSubjectpage = false;
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+   MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -39,15 +43,23 @@ class MyApp extends StatelessWidget {
             BlocProvider(
               create: (context) => DraftSubjectBloc(),
             ),
+            BlocProvider(
+              create: (context) => DeleteBloc(),
+            ),
+
+            BlocProvider(
+              create: (context) => ToggleSujectBloc(),
+            ),
           ],
           child: MaterialApp(
             title: 'Klaw App',
+          home: Login(),
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
               useMaterial3: true,
             ),
-            home: Login(),
+
           ),
         );
       },

@@ -9,8 +9,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../ModelClass/AddSubjectModel.dart';
 import '../ModelClass/AdminLoginModelClass.dart';
+import '../ModelClass/DeleteModelClass.dart';
 import '../ModelClass/DraftSubjectModel.dart';
 import '../ModelClass/PublishedSubjectModel.dart';
+import '../ModelClass/ToggleModelClass.dart';
 import 'Api_client.dart';
 
 
@@ -59,6 +61,7 @@ class AdminApi {
       String description,
       String status,
       List<PlatformFile> selectedFiles,) async {
+    print('selectedfile '+selectedFiles.toString());
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String accessToken = prefs.getString('token') ?? "";
 
@@ -78,7 +81,8 @@ class AdminApi {
     request.fields['status'] = status;
 
     // Adding multiple files to the request
-    if (selectedFiles != null && selectedFiles.isNotEmpty) {
+    if (selectedFiles.isNotEmpty) {
+
       for (var file in selectedFiles) {
         if (kIsWeb) {
           // For web, use bytes
@@ -138,4 +142,34 @@ class AdminApi {
 
     return DraftSubjectModel.fromJson(jsonDecode(response.body));
   }
+
+  //Delete
+
+  Future<DeleteModelClass> getDeleteSubject( String SubjectId ) async {
+    String trendingpath = 'https://flawsapp.onrender.com/flawsproject/adminside/delete-course/$SubjectId/';
+
+    var body = {
+
+    };
+    Response response =
+    await apiClient.invokeAPI(trendingpath, 'DELETE', null);
+
+    return DeleteModelClass.fromJson(jsonDecode(response.body));
+  }
+//Toggle Api Publish to draft & draft to publish
+  Future<ToggleModelClass> getToggleSubject( String SubjectId ) async {
+    String trendingpath = 'https://flawsapp.onrender.com/flawsproject/adminside/api/toggle-course-status/$SubjectId/';
+
+    var body = {
+
+    };
+    Response response =
+    await apiClient.invokeAPI(trendingpath, 'POST', null);
+
+    return ToggleModelClass.fromJson(jsonDecode(response.body));
+  }
+
+
+
+
 }

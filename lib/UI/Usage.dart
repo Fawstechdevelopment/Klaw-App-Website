@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Usage extends StatefulWidget {
-  const Usage({super.key});
+  final VoidCallback onBack;
+  const Usage({super.key, required this.onBack});
 
   @override
   State<Usage> createState() => _UsageState();

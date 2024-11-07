@@ -134,8 +134,8 @@ class _LoginState extends State<Login> {
                               BlocProvider.of<LoginBloc>(context).adminLoginModel;
                           Navigator.of(context).pop();
                           ToastMessage().toastmessage(message: "Succesfully login");
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => const Home()));
+                          // DashboardHome.instance;
+Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> Home()), (route)=> false);
                           checkLogin(data.access.toString());
                         }
                       },
@@ -298,4 +298,6 @@ class _LoginState extends State<Login> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', token);
   }
+
+
 }

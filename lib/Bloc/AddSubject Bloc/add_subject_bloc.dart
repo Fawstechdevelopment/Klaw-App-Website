@@ -28,7 +28,7 @@ class AddSubjectBloc extends Bloc<AddSubjectEvent, AddSubjectState> {
        ToastMessage()
            .toastmessage(message:e.toString());
 
-       print(e.toString());
+       print(' hello adding error'+e.toString());
           }
 
 
