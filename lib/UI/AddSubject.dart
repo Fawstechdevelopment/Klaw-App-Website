@@ -27,7 +27,7 @@ class _AddsubjectState extends State<Addsubject> {
   bool dropdownexpand = false;
   List<PlatformFile>? _selectedFiles;
   var formkey = GlobalKey<FormState>();
-
+  bool isLoading = false;
   Future<void> _pickFiles() async {
     // Allow multiple files to be selected
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -96,18 +96,22 @@ class _AddsubjectState extends State<Addsubject> {
       listener: (context, state) {
         if (state is AddSubjectBlocLoading) {
           print("siginloading");
-
+          // if (isLoading)
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return Center(
+              return
+                Center(
                 child: CircularProgressIndicator(),
               );
             },
           );
+          // setState(() {
+          //   isLoading = true; // Show loading indicator
+          // });
         }
         if (state is AddSubjectBlocError) {
-          Navigator.of(context).pop();
+
 
           print('error');
         }
@@ -124,6 +128,10 @@ class _AddsubjectState extends State<Addsubject> {
           ToastMessage().toastmessage(
               message: "Subject Added  Succesfully ");
         widget.onBack();
+
+          // setState(() {
+          //   isLoading = false; // Stop loading
+          // });
         }
       },
       child: Padding(

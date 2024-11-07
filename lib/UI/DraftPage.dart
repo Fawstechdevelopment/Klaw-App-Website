@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:klawapp/Bloc/DeleteSubject_Bloc/delete_bloc.dart';
+import 'package:klawapp/Bloc/ToggleSubject%20Bloc/toggle_suject_bloc.dart';
 
 import '../Bloc/DraftSubjectBloc/draft_subject_bloc.dart';
+import '../Repository/ModelClass/DeleteModelClass.dart';
 import '../Repository/ModelClass/DraftSubjectModel.dart';
+import '../Repository/ModelClass/ToggleModelClass.dart';
 
 class Draftpage extends StatefulWidget {
   final VoidCallback onNavigate;
@@ -19,9 +23,11 @@ class Draftpage extends StatefulWidget {
 class _DraftpageState extends State<Draftpage> {
   int? draftselectedIndex;
   late DraftSubjectModel draftSubject;
+  late DeleteModelClass delete;
+  late ToggleModelClass toggle;
+  bool isLoading = false;
   @override
   void initState() {
-
     BlocProvider.of<DraftSubjectBloc>(context).add(FeatchDraftSubject());
     super.initState();
   }
@@ -31,39 +37,40 @@ class _DraftpageState extends State<Draftpage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(backgroundColor: Colors.white,
-      automaticallyImplyLeading: false,actions: [  GestureDetector(
-      onTap:widget.onBack,
-      child: Align(
-        alignment: Alignment.topRight,
-        child: SizedBox(
-          width: 177.w,
-          height: 48.h,
-          child: Row(
-            children: [
-              Icon(
-                Icons.arrow_back,
-                size: 30.sp,
-                color: Color(0xFF009357),
-              ),
-              Text(
-                'CANCEL',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.roboto(
-                  textStyle: TextStyle(
+        automaticallyImplyLeading: false, actions: [ GestureDetector(
+          onTap: widget.onBack,
+          child: Align(
+            alignment: Alignment.topRight,
+            child: SizedBox(
+              width: 177.w,
+              height: 48.h,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.arrow_back,
+                    size: 30.sp,
                     color: Color(0xFF009357),
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w600,
                   ),
-                ),
+                  Text(
+                    'CANCEL',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.roboto(
+                      textStyle: TextStyle(
+                        color: Color(0xFF009357),
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
-      ),
-    ),],),
-      body:  SingleChildScrollView(
+        ],),
+      body: SingleChildScrollView(
         child: Padding(
-          padding:  EdgeInsets.only(left: 30.w),
+          padding: EdgeInsets.only(left: 30.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -83,8 +90,8 @@ class _DraftpageState extends State<Draftpage> {
 
 
                       return SizedBox(
-                        width:1200.w,
-                        height: 350 *  draftSubject.draft!.length.h,
+                        width: 1200.w,
+                        height: 350 * draftSubject.draft!.length.h,
                         child: ListView.separated(
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: draftSubject.draft!.length,
@@ -273,20 +280,70 @@ class _DraftpageState extends State<Draftpage> {
                                           SizedBox(
                                             height: 5.h,
                                           ),
-                                          SizedBox(
-                                            width: 129.20.w,
-                                            height: 25.h,
-                                            child: Text(
-                                              'PUBLISH',
-                                              textAlign: TextAlign
-                                                  .center,
-                                              style: GoogleFonts
-                                                  .notoSans(
-                                                textStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 15.sp,
-                                                  fontWeight: FontWeight
-                                                      .w700,
+                                          BlocListener<ToggleSujectBloc,
+                                              ToggleSujectState>(
+                                            listener: (context, state) {
+                                              if (state is ToggleBlocLoading) {
+                                                print("siginloading");
+
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (
+                                                      BuildContext context) {
+                                                    return Center(
+                                                      child: CircularProgressIndicator(),
+                                                    );
+                                                  },
+                                                );
+                                                setState(() {
+                                                  isLoading = true; // Show loading indicator
+                                                });
+                                              }
+                                              if (state is ToggleBlocError) {
+                                                setState(() {
+                                                  isLoading = false; // Stop loading
+                                                });
+
+                                                print('error');
+                                              }
+                                              if (state is ToggleBlocLoaded) {
+                                                toggle = BlocProvider
+                                                    .of<ToggleSujectBloc>(
+                                                    context)
+                                                    .togglesubject;
+                                                setState(() {
+                                                  isLoading = false; // Stop loading
+                                                });
+                                              }
+                                            },
+                                            child: InkWell(
+                                              onTap: () {
+
+                                                BlocProvider.of<
+                                                    ToggleSujectBloc>(context)
+                                                    .add(FeatchToggle(
+                                                    SubjectId: draftSubject
+                                                        .draft![position]
+                                                        .objectId
+                                                        .toString()));
+                                              },
+
+                                              child: SizedBox(
+                                                width: 129.20.w,
+                                                height: 25.h,
+                                                child: Text(
+                                                  'PUBLISH',
+                                                  textAlign: TextAlign
+                                                      .center,
+                                                  style: GoogleFonts
+                                                      .notoSans(
+                                                    textStyle: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 15.sp,
+                                                      fontWeight: FontWeight
+                                                          .w700,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -311,20 +368,58 @@ class _DraftpageState extends State<Draftpage> {
                                             ),
                                           ),
                                           Divider(),
-                                          SizedBox(
-                                            width: 129.20.w,
-                                            height: 23.h,
-                                            child: Text(
-                                              'DELETE',
-                                              textAlign: TextAlign
-                                                  .center,
-                                              style: GoogleFonts
-                                                  .notoSans(
-                                                textStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 15.sp,
-                                                  fontWeight: FontWeight
-                                                      .w700,
+                                          BlocListener<DeleteBloc,
+                                              DeleteState>(
+                                            listener: (context, state) {
+                                              if (state is DeleteBlocLoading) {
+                                                print("siginloading");
+
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (
+                                                      BuildContext context) {
+                                                    return Center(
+                                                      child: CircularProgressIndicator(),
+                                                    );
+                                                  },
+                                                );
+                                              }
+                                              if (state is DeleteBlocError) {
+                                                Navigator.of(context).pop();
+
+                                                print('error');
+                                              }
+                                              if (state is DeleteBlocLoaded) {
+                                                delete = BlocProvider
+                                                    .of<DeleteBloc>(context)
+                                                    .deleteModel;
+                                              }
+                                            },
+                                            child: InkWell(onTap: () {
+                                              BlocProvider.of<DeleteBloc>(
+                                                  context).add(FeatchDelete(
+                                                  SubjectId: draftSubject
+                                                      .draft![position]
+                                                      .objectId
+                                                      .toString()));
+
+                                            },
+                                              child: SizedBox(
+                                                width: 129.20.w,
+                                                height: 23.h,
+                                                child: Text(
+                                                  'DELETE',
+                                                  textAlign: TextAlign
+                                                      .center,
+                                                  style: GoogleFonts
+                                                      .notoSans(
+                                                    textStyle: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 15.sp,
+                                                      fontWeight: FontWeight
+                                                          .w700,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
