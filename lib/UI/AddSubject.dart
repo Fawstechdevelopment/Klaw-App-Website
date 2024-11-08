@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:klawapp/UI/Showing%20subject.dart';
 
 import '../Bloc/AddSubject Bloc/add_subject_bloc.dart';
 import '../Repository/ModelClass/AddSubjectModel.dart';
 import '../ToastMessage.dart';
-import 'dart:html' as html;
 class Addsubject extends StatefulWidget {
   final VoidCallback onBack;
 
@@ -27,8 +25,7 @@ class _AddsubjectState extends State<Addsubject> {
   bool dropdownexpand = false;
   List<PlatformFile>? _selectedFiles;
   var formkey = GlobalKey<FormState>();
-  bool isLoading = false;
-  Future<void> _pickFiles() async {
+  bool _isDialogVisible = false;   Future<void> _pickFiles() async {
     // Allow multiple files to be selected
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true, // Enables multiple file selection
@@ -63,52 +60,58 @@ class _AddsubjectState extends State<Addsubject> {
     return Scaffold(backgroundColor: Colors.white,
       appBar: AppBar(backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
-        actions: [ GestureDetector(
-        onTap:(){
-          widget.onBack();
-        } ,
-        child: SizedBox(
-          width: 177.w,
-          height: 48.h,
-          child: Row(
-            children: [
-              Icon(
-                Icons.arrow_back,
-                size: 30.sp,
-                color: const Color(0xFF009357),
-              ),
-              Text(
-                'CANCEL',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.roboto(
-                  textStyle: TextStyle(
-                    color: const Color(0xFF009357),
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w600,
+        actions: [ MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+          onTap:(){
+            widget.onBack();
+          } ,
+          child: SizedBox(
+            width: 177.w,
+            height: 48.h,
+            child: Row(
+              children: [
+                Icon(
+                  Icons.arrow_back,
+                  size: 30.sp,
+                  color: const Color(0xFF009357),
+                ),
+                Text(
+                  'CANCEL',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.roboto(
+                    textStyle: TextStyle(
+                      color: const Color(0xFF009357),
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),],),
+                ),
+        ),],),
       body: BlocListener<AddSubjectBloc, AddSubjectState>(
       listener: (context, state) {
         if (state is AddSubjectBlocLoading) {
           print("siginloading");
           // if (isLoading)
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return
-                Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-          );
-          // setState(() {
-          //   isLoading = true; // Show loading indicator
-          // });
+          if (!_isDialogVisible) {
+            setState(() {
+              _isDialogVisible = true;
+            });
+            showDialog(
+              context: context,
+              barrierDismissible: false, // Prevents dialog from being closed
+              builder: (BuildContext context) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            );
+          }
+
         }
         if (state is AddSubjectBlocError) {
 
@@ -124,14 +127,20 @@ class _AddsubjectState extends State<Addsubject> {
           universitycontroller.clear();
           descriptioncontroller.clear();
           _selectedFiles?.clear();
-          // Navigator.of(context).pop();
+
+          if (_isDialogVisible) {
+            Navigator.of(context).pop(); // Close the dialog
+            setState(() {
+              _isDialogVisible = false;
+            });
+          }
+
+
           ToastMessage().toastmessage(
               message: "Subject Added  Succesfully ");
         widget.onBack();
 
-          // setState(() {
-          //   isLoading = false; // Stop loading
-          // });
+
         }
       },
       child: Padding(
@@ -400,28 +409,31 @@ class _AddsubjectState extends State<Addsubject> {
                           CrossAxisAlignment.start,
                           children: [
                             // "Choose file" button
-                            GestureDetector(
-                              onTap: _pickFiles,
-                              child: Container(
-                                width: 203.w,
-                                height: 53.h,
-                                decoration: ShapeDecoration(
-                                  color: Color(0xFF0ABC74),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(
-                                        10.r),
+                            MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                onTap: _pickFiles,
+                                child: Container(
+                                  width: 203.w,
+                                  height: 53.h,
+                                  decoration: ShapeDecoration(
+                                    color: Color(0xFF0ABC74),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(
+                                          10.r),
+                                    ),
                                   ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Choose file',
-                                    style: GoogleFonts.notoSans(
-                                      textStyle: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 27.sp,
-                                        fontWeight:
-                                        FontWeight.w400,
+                                  child: Center(
+                                    child: Text(
+                                      'Choose file',
+                                      style: GoogleFonts.notoSans(
+                                        textStyle: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 27.sp,
+                                          fontWeight:
+                                          FontWeight.w400,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -678,47 +690,51 @@ class _AddsubjectState extends State<Addsubject> {
                   EdgeInsets.only(left: 283.w, top: 71.h),
                   child: Row(
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          print('pdfsubject'+ _selectedFiles.toString());
-                          final isValid =
-                          formkey.currentState?.validate();
-                          if (isValid!) {
+                      MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () {
+                            print('pdfsubject'+ _selectedFiles.toString());
+                            final isValid =
+                            formkey.currentState?.validate();
+                            if (isValid!) {
 
-                            BlocProvider.of<AddSubjectBloc>(
-                                context)
-                                .add(FeatchAddSubject(
-                                title: titlecontroller.text,
-                                coursecode:
-                                coursecodecontroller.text,
-                                university:
-                                universitycontroller.text,
-                                description:
-                                descriptioncontroller
-                                    .text,
-                                status: 'published',
-                                subjectpdf: _selectedFiles!));
-                          }
-                          formkey.currentState?.save();
-                        },
-                        child: Container(
-                          width: 219.90.w,
-                          height: 69.h,
-                          decoration: ShapeDecoration(
-                            color: Color(0xFF0ABC74),
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.circular(15.r),
+                              BlocProvider.of<AddSubjectBloc>(
+                                  context)
+                                  .add(FeatchAddSubject(
+                                  title: titlecontroller.text,
+                                  coursecode:
+                                  coursecodecontroller.text,
+                                  university:
+                                  universitycontroller.text,
+                                  description:
+                                  descriptioncontroller
+                                      .text,
+                                  status: 'published',
+                                  subjectpdf: _selectedFiles!));
+                              print('loadedpdf'+_selectedFiles.toString() );
+                            }
+                            formkey.currentState?.save();
+                          },
+                          child: Container(
+                            width: 219.90.w,
+                            height: 69.h,
+                            decoration: ShapeDecoration(
+                              color: Color(0xFF0ABC74),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(15.r),
+                              ),
                             ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'PUBLISH',
-                              style: GoogleFonts.notoSans(
-                                textStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 27.sp,
-                                  fontWeight: FontWeight.w700,
+                            child: Center(
+                              child: Text(
+                                'PUBLISH',
+                                style: GoogleFonts.notoSans(
+                                  textStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 27.sp,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                               ),
                             ),
@@ -726,47 +742,50 @@ class _AddsubjectState extends State<Addsubject> {
                         ),
                       ),
                       SizedBox(width: 43.w),
-                      GestureDetector(
-                        onTap: () {
+                      MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () {
 
-                          final isValid =
-                          formkey.currentState?.validate();
-                          if (isValid!) {
-                            BlocProvider.of<AddSubjectBloc>(
-                                context)
-                                .add(FeatchAddSubject(
-                                title: titlecontroller.text,
-                                coursecode:
-                                coursecodecontroller.text,
-                                university:
-                                universitycontroller.text,
-                                description:
-                                descriptioncontroller
-                                    .text,
-                                status: 'draft',
-                                subjectpdf: _selectedFiles!));
-                          }
-                          formkey.currentState?.save();
+                            final isValid =
+                            formkey.currentState?.validate();
+                            if (isValid!) {
+                              BlocProvider.of<AddSubjectBloc>(
+                                  context)
+                                  .add(FeatchAddSubject(
+                                  title: titlecontroller.text,
+                                  coursecode:
+                                  coursecodecontroller.text,
+                                  university:
+                                  universitycontroller.text,
+                                  description:
+                                  descriptioncontroller
+                                      .text,
+                                  status: 'draft',
+                                  subjectpdf:_selectedFiles!));
+                            }
+                            formkey.currentState?.save();
 
-                        },
-                        child: Container(
-                          width: 167.w,
-                          height: 69.h,
-                          decoration: ShapeDecoration(
-                            color: Color(0xFF0ABC74),
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.circular(15.r),
+                          },
+                          child: Container(
+                            width: 167.w,
+                            height: 69.h,
+                            decoration: ShapeDecoration(
+                              color: Color(0xFF0ABC74),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(15.r),
+                              ),
                             ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'DRAFT',
-                              style: GoogleFonts.notoSans(
-                                textStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 27.sp,
-                                  fontWeight: FontWeight.w700,
+                            child: Center(
+                              child: Text(
+                                'DRAFT',
+                                style: GoogleFonts.notoSans(
+                                  textStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 27.sp,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                               ),
                             ),

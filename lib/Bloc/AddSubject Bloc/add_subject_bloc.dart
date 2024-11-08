@@ -19,6 +19,7 @@ class AddSubjectBloc extends Bloc<AddSubjectEvent, AddSubjectState> {
     on<FeatchAddSubject>((event, emit) async{
       emit( AddSubjectBlocLoading());
       try{
+        print('hellopdf'+ event.subjectpdf.toString());
         addSubjectModel=await adminApi.getAddSubject(event.title, event.coursecode, event.university, event.description, event.status,event.subjectpdf);
         emit(AddSubjectBlocLoaded());
       }

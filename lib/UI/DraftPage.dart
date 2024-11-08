@@ -11,10 +11,10 @@ import '../Repository/ModelClass/DraftSubjectModel.dart';
 import '../Repository/ModelClass/ToggleModelClass.dart';
 
 class Draftpage extends StatefulWidget {
-  final VoidCallback onNavigate;
+  final VoidCallback onNavigateEditpage;
   final VoidCallback onBack;
 
-  const Draftpage({super.key, required this.onNavigate, required this.onBack});
+  const Draftpage({super.key, required this.onNavigateEditpage, required this.onBack});
 
   @override
   State<Draftpage> createState() => _DraftpageState();
@@ -37,32 +37,35 @@ class _DraftpageState extends State<Draftpage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(backgroundColor: Colors.white,
-        automaticallyImplyLeading: false, actions: [ GestureDetector(
-          onTap: widget.onBack,
-          child: Align(
-            alignment: Alignment.topRight,
-            child: SizedBox(
-              width: 177.w,
-              height: 48.h,
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.arrow_back,
-                    size: 30.sp,
-                    color: Color(0xFF009357),
-                  ),
-                  Text(
-                    'CANCEL',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.roboto(
-                      textStyle: TextStyle(
-                        color: Color(0xFF009357),
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w600,
+        automaticallyImplyLeading: false, actions: [ MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: widget.onBack,
+            child: Align(
+              alignment: Alignment.topRight,
+              child: SizedBox(
+                width: 177.w,
+                height: 48.h,
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.arrow_back,
+                      size: 30.sp,
+                      color: Color(0xFF009357),
+                    ),
+                    Text(
+                      'CANCEL',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.roboto(
+                        textStyle: TextStyle(
+                          color: Color(0xFF009357),
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -286,34 +289,23 @@ class _DraftpageState extends State<Draftpage> {
                                               if (state is ToggleBlocLoading) {
                                                 print("siginloading");
 
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (
-                                                      BuildContext context) {
-                                                    return Center(
-                                                      child: CircularProgressIndicator(),
-                                                    );
-                                                  },
-                                                );
-                                                setState(() {
-                                                  isLoading = true; // Show loading indicator
-                                                });
+
                                               }
                                               if (state is ToggleBlocError) {
-                                                setState(() {
-                                                  isLoading = false; // Stop loading
-                                                });
+
 
                                                 print('error');
                                               }
                                               if (state is ToggleBlocLoaded) {
+
                                                 toggle = BlocProvider
                                                     .of<ToggleSujectBloc>(
                                                     context)
                                                     .togglesubject;
-                                                setState(() {
-                                                  isLoading = false; // Stop loading
-                                                });
+
+
+
+
                                               }
                                             },
                                             child: InkWell(
@@ -326,6 +318,8 @@ class _DraftpageState extends State<Draftpage> {
                                                         .draft![position]
                                                         .objectId
                                                         .toString()));
+
+                                               BlocProvider.of<DraftSubjectBloc>(context).add(FeatchDraftSubject());
                                               },
 
                                               child: SizedBox(
@@ -349,20 +343,22 @@ class _DraftpageState extends State<Draftpage> {
                                             ),
                                           ),
                                           Divider(),
-                                          SizedBox(
-                                            width: 129.20.w,
-                                            height: 23.h,
-                                            child: Text(
-                                              'EDIT',
-                                              textAlign: TextAlign
-                                                  .center,
-                                              style: GoogleFonts
-                                                  .notoSans(
-                                                textStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 15.sp,
-                                                  fontWeight: FontWeight
-                                                      .w700,
+                                          InkWell(onTap:widget.onNavigateEditpage ,
+                                            child: SizedBox(
+                                              width: 129.20.w,
+                                              height: 23.h,
+                                              child: Text(
+                                                'EDIT',
+                                                textAlign: TextAlign
+                                                    .center,
+                                                style: GoogleFonts
+                                                    .notoSans(
+                                                  textStyle: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15.sp,
+                                                    fontWeight: FontWeight
+                                                        .w700,
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -374,15 +370,6 @@ class _DraftpageState extends State<Draftpage> {
                                               if (state is DeleteBlocLoading) {
                                                 print("siginloading");
 
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (
-                                                      BuildContext context) {
-                                                    return Center(
-                                                      child: CircularProgressIndicator(),
-                                                    );
-                                                  },
-                                                );
                                               }
                                               if (state is DeleteBlocError) {
                                                 Navigator.of(context).pop();
@@ -390,9 +377,12 @@ class _DraftpageState extends State<Draftpage> {
                                                 print('error');
                                               }
                                               if (state is DeleteBlocLoaded) {
+
                                                 delete = BlocProvider
                                                     .of<DeleteBloc>(context)
                                                     .deleteModel;
+
+
                                               }
                                             },
                                             child: InkWell(onTap: () {
@@ -402,7 +392,7 @@ class _DraftpageState extends State<Draftpage> {
                                                       .draft![position]
                                                       .objectId
                                                       .toString()));
-
+                                              BlocProvider.of<DraftSubjectBloc>(context).add(FeatchDraftSubject());
                                             },
                                               child: SizedBox(
                                                 width: 129.20.w,
