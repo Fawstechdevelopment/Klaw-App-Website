@@ -162,6 +162,7 @@ Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> Home()
                             padding: EdgeInsets.only(top: 62.h, right: 20.w),
                             child: TextFormField(
                               controller: usernamecontroller,
+                              textInputAction: TextInputAction.next,
                               decoration: InputDecoration(
                                   hintText: 'Username',
                                   hintStyle: GoogleFonts.notoSans(

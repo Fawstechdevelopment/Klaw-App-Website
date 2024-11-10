@@ -88,7 +88,7 @@ class AdminApi {
           // For web, use bytes
           if (file.bytes != null) {
             request.files.add(http.MultipartFile.fromBytes(
-              'files', // This should match the backend's expected field name
+              'file', // This should match the backend's expected field name
               file.bytes!,
               filename: file.name,
             ));
@@ -97,7 +97,7 @@ class AdminApi {
           // For mobile platforms, use the file path
           if (file.path != null) {
             request.files.add(await http.MultipartFile.fromPath(
-              'files',
+              'file',
               file.path!,
             ));
           }

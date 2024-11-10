@@ -298,13 +298,14 @@ class _DraftpageState extends State<Draftpage> {
                                               }
                                               if (state is ToggleBlocLoaded) {
 
+
+                                                BlocProvider.of<DraftSubjectBloc>(context).add(FeatchDraftSubject());
+
+
                                                 toggle = BlocProvider
                                                     .of<ToggleSujectBloc>(
                                                     context)
                                                     .togglesubject;
-
-
-
 
                                               }
                                             },
@@ -319,7 +320,7 @@ class _DraftpageState extends State<Draftpage> {
                                                         .objectId
                                                         .toString()));
 
-                                               BlocProvider.of<DraftSubjectBloc>(context).add(FeatchDraftSubject());
+
                                               },
 
                                               child: SizedBox(
@@ -378,6 +379,9 @@ class _DraftpageState extends State<Draftpage> {
                                               }
                                               if (state is DeleteBlocLoaded) {
 
+
+
+                                                BlocProvider.of<DraftSubjectBloc>(context).add(FeatchDraftSubject());
                                                 delete = BlocProvider
                                                     .of<DeleteBloc>(context)
                                                     .deleteModel;
@@ -392,7 +396,7 @@ class _DraftpageState extends State<Draftpage> {
                                                       .draft![position]
                                                       .objectId
                                                       .toString()));
-                                              BlocProvider.of<DraftSubjectBloc>(context).add(FeatchDraftSubject());
+
                                             },
                                               child: SizedBox(
                                                 width: 129.20.w,

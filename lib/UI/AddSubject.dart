@@ -1,4 +1,5 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,18 +26,17 @@ class _AddsubjectState extends State<Addsubject> {
   bool dropdownexpand = false;
   List<PlatformFile>? _selectedFiles;
   var formkey = GlobalKey<FormState>();
-  bool _isDialogVisible = false;   Future<void> _pickFiles() async {
+  bool _isDialogVisible = false;
+
+
+  Future<void> _pickFiles() async {
     // Allow multiple files to be selected
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true, // Enables multiple file selection
       type: FileType.custom, // You can customize file types if needed
       allowedExtensions: [
         'pdf',
-        'jpg',
-        'jpeg',
-        'png',
-        'doc',
-        'docx'
+        'txt',
       ], // Allowing specific extensions
     );
 
@@ -45,7 +45,9 @@ class _AddsubjectState extends State<Addsubject> {
       setState(() {
         _selectedFiles = result.files; // Store the selected files
       });
-      print('pdfsubject'+ _selectedFiles.toString());
+      if (kDebugMode) {
+        print('pdfsubject$_selectedFiles');
+      }
     } else {
       // User canceled the picker
       setState(() {
@@ -168,6 +170,7 @@ class _AddsubjectState extends State<Addsubject> {
                       child: TextFormField(
                         controller: titlecontroller,
                         cursorColor: Colors.white,
+                        textInputAction: TextInputAction.next,
                         style: TextStyle(
                             color: Colors.white, fontSize: 20.sp),
                         decoration: InputDecoration(
@@ -227,6 +230,7 @@ class _AddsubjectState extends State<Addsubject> {
                       child: TextFormField(
                         controller: coursecodecontroller,
                         cursorColor: Colors.white,
+                        textInputAction: TextInputAction.next,
                         style: TextStyle(
                             color: Colors.white, fontSize: 20.sp),
                         decoration: InputDecoration(
@@ -285,6 +289,7 @@ class _AddsubjectState extends State<Addsubject> {
                       child: TextFormField(
                         controller: universitycontroller,
                         cursorColor: Colors.white,
+                        textInputAction: TextInputAction.next,
                         style: TextStyle(
                             color: Colors.white, fontSize: 20.sp),
                         decoration: InputDecoration(
@@ -390,7 +395,7 @@ class _AddsubjectState extends State<Addsubject> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 39.h),
-                  child: Text('Choose your files .PDF/.TEXT',
+                  child: Text('Choose your files .PDF/.TXT',
                       style: GoogleFonts.notoSans(
                         textStyle: TextStyle(
                           color: Colors.black,
@@ -695,10 +700,12 @@ class _AddsubjectState extends State<Addsubject> {
                         child: GestureDetector(
                           onTap: () {
                             print('pdfsubject'+ _selectedFiles.toString());
+
+
                             final isValid =
                             formkey.currentState?.validate();
                             if (isValid!) {
-
+                              print('  api calling pfd taked');
                               BlocProvider.of<AddSubjectBloc>(
                                   context)
                                   .add(FeatchAddSubject(

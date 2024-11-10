@@ -283,6 +283,11 @@ class _ShowingSubjectState extends State<ShowingSubject> {
                                                       if (state
                                                           is ToggleBlocLoaded) {
 
+                                                        BlocProvider.of<PublishedSubjectBloc>(context)
+                                                            .add(FeatchPublishedSubjects());
+
+
+
                                                         toggle = BlocProvider
                                                                 .of<ToggleSujectBloc>(
                                                                     context)
@@ -304,8 +309,6 @@ class _ShowingSubjectState extends State<ShowingSubject> {
                                                                     .toString()));
 
 
-                                                        BlocProvider.of<PublishedSubjectBloc>(context)
-                                                            .add(FeatchPublishedSubjects());
 
                                                       },
                                                       child: SizedBox(
@@ -376,6 +379,10 @@ class _ShowingSubjectState extends State<ShowingSubject> {
                                                       if (state
                                                           is DeleteBlocLoaded) {
 
+                                                        BlocProvider.of<PublishedSubjectBloc>(context)
+                                                            .add(FeatchPublishedSubjects());
+
+
                                                         delete = BlocProvider
                                                                 .of<DeleteBloc>(
                                                                     context)
@@ -394,8 +401,7 @@ class _ShowingSubjectState extends State<ShowingSubject> {
                                                                         position]
                                                                     .objectId
                                                                     .toString()));
-                                                        BlocProvider.of<PublishedSubjectBloc>(context)
-                                                            .add(FeatchPublishedSubjects());
+
                                                       },
                                                       child: SizedBox(
                                                         width: 129.20.w,
