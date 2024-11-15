@@ -15,7 +15,7 @@ class ToggleSujectBloc extends Bloc<ToggleSujectEvent, ToggleSujectState> {
       emit( ToggleBlocLoading());
       try{
         togglesubject = await adminApi.getToggleSubject(event.SubjectId);
-
+emit(ToggleBlocLoaded());
       }
 catch(e){
         emit(ToggleBlocError());

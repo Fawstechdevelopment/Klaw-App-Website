@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -51,14 +52,14 @@ class _DraftpageState extends State<Draftpage> {
                     Icon(
                       Icons.arrow_back,
                       size: 30.sp,
-                      color: Color(0xFF009357),
+                      color: const Color(0xFF009357),
                     ),
                     Text(
                       'CANCEL',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.roboto(
                         textStyle: TextStyle(
-                          color: Color(0xFF009357),
+                          color: const Color(0xFF009357),
                           fontSize: 20.sp,
                           fontWeight: FontWeight.w600,
                         ),
@@ -80,11 +81,11 @@ class _DraftpageState extends State<Draftpage> {
               BlocBuilder<DraftSubjectBloc, DraftSubjectState>(
                   builder: (context, state) {
                     if (state is DraftSubjectBlocLoading) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),);
                     }
                     if (state is DraftSubjectBlocError) {
-                      return Center(child: Text('Error'),);
+                      return const Center(child: Text('Error'),);
                     }
                     if (state is DraftSubjectBlocLoaded) {
                       draftSubject = BlocProvider
@@ -96,12 +97,12 @@ class _DraftpageState extends State<Draftpage> {
                         width: 1200.w,
                         height: 350 * draftSubject.draft!.length.h,
                         child: ListView.separated(
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: draftSubject.draft!.length,
                           itemBuilder: (Buildcontext, position) {
                             return Stack(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 860.w,
                                   height: 330.h,
                                   child: Row(
@@ -125,7 +126,7 @@ class _DraftpageState extends State<Draftpage> {
                                               width: 205.w,
                                               height: 205.h,
                                               decoration: ShapeDecoration(
-                                                color: Color(
+                                                color: const Color(
                                                     0xFF006039),
                                                 shape: RoundedRectangleBorder(
                                                     borderRadius:
@@ -167,7 +168,7 @@ class _DraftpageState extends State<Draftpage> {
                                                 SizedBox(height: 40
                                                     .h),
                                                 SizedBox(
-                                                  width: 160.w,
+                                                  width: 280.w,
                                                   height: 45.h,
                                                   child: Text(
                                                     draftSubject
@@ -262,16 +263,16 @@ class _DraftpageState extends State<Draftpage> {
                                       width: 134.06.w,
                                       height: 120.h,
                                       decoration: ShapeDecoration(
-                                        color: Color(0xFF03B96F),
+                                        color: const Color(0xFF03B96F),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                           BorderRadius.circular(11.r),
                                         ),
                                         shadows: [
                                           BoxShadow(
-                                            color: Color(0x3F000000),
+                                            color: const Color(0x3F000000),
                                             blurRadius: 4.r,
-                                            offset: Offset(4, 3),
+                                            offset: const Offset(4, 3),
                                             spreadRadius: 0.r,
                                           )
                                         ],
@@ -287,14 +288,18 @@ class _DraftpageState extends State<Draftpage> {
                                               ToggleSujectState>(
                                             listener: (context, state) {
                                               if (state is ToggleBlocLoading) {
-                                                print("siginloading");
+                                                if (kDebugMode) {
+                                                  print("siginloading");
+                                                }
 
 
                                               }
                                               if (state is ToggleBlocError) {
 
 
-                                                print('error');
+                                                if (kDebugMode) {
+                                                  print('error');
+                                                }
                                               }
                                               if (state is ToggleBlocLoaded) {
 
@@ -343,7 +348,7 @@ class _DraftpageState extends State<Draftpage> {
                                               ),
                                             ),
                                           ),
-                                          Divider(),
+                                          const Divider(),
                                           InkWell(onTap:widget.onNavigateEditpage ,
                                             child: SizedBox(
                                               width: 129.20.w,
@@ -364,18 +369,22 @@ class _DraftpageState extends State<Draftpage> {
                                               ),
                                             ),
                                           ),
-                                          Divider(),
+                                          const Divider(),
                                           BlocListener<DeleteBloc,
                                               DeleteState>(
                                             listener: (context, state) {
                                               if (state is DeleteBlocLoading) {
-                                                print("siginloading");
+                                                if (kDebugMode) {
+                                                  print("siginloading");
+                                                }
 
                                               }
                                               if (state is DeleteBlocError) {
                                                 Navigator.of(context).pop();
 
-                                                print('error');
+                                                if (kDebugMode) {
+                                                  print('error');
+                                                }
                                               }
                                               if (state is DeleteBlocLoaded) {
 
@@ -426,12 +435,18 @@ class _DraftpageState extends State<Draftpage> {
                             );
                           },
                           separatorBuilder: (Buildcontext, position) {
+
+
+
                             return SizedBox(height: 20.h);
+
+
+
                           },
                         ),
                       );
                     } else {
-                      return SizedBox();
+                      return const SizedBox();
                     }
                   }
               ),

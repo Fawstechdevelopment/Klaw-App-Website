@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,8 +37,13 @@ class _ShowingSubjectState extends State<ShowingSubject> {
   void initState() {
     BlocProvider.of<PublishedSubjectBloc>(context)
         .add(FeatchPublishedSubjects());
+
+
     super.initState();
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +155,7 @@ class _ShowingSubjectState extends State<ShowingSubject> {
                                                       children: [
                                                         SizedBox(height: 40.h),
                                                         SizedBox(
-                                                          width: 160.w,
+                                                          width: 280.w,
                                                           height: 45.h,
                                                           child: Text(
                                                             subject

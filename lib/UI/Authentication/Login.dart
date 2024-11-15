@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -113,12 +114,14 @@ class _LoginState extends State<Login> {
                     child: BlocListener<LoginBloc, LoginState>(
                       listener: (context, state) {
                         if (state is LoginBlocLoading) {
-                          print("siginloading");
+                          if (kDebugMode) {
+                            print("siginloading");
+                          }
 
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return Center(
+                              return const Center(
                                 child: CircularProgressIndicator(),
                               );
                             },
@@ -127,7 +130,9 @@ class _LoginState extends State<Login> {
                         if (state is LoginBlocError) {
                           Navigator.of(context).pop();
 
-                          print('error');
+                          if (kDebugMode) {
+                            print('error');
+                          }
                         }
                         if (state is LoginBlocLoaded) {
                           data =

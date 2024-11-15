@@ -97,7 +97,9 @@ class _AddsubjectState extends State<Addsubject> {
       body: BlocListener<AddSubjectBloc, AddSubjectState>(
       listener: (context, state) {
         if (state is AddSubjectBlocLoading) {
-          print("siginloading");
+          if (kDebugMode) {
+            print("siginloading");
+          }
           // if (isLoading)
           if (!_isDialogVisible) {
             setState(() {
@@ -107,7 +109,7 @@ class _AddsubjectState extends State<Addsubject> {
               context: context,
               barrierDismissible: false, // Prevents dialog from being closed
               builder: (BuildContext context) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               },
@@ -118,7 +120,9 @@ class _AddsubjectState extends State<Addsubject> {
         if (state is AddSubjectBlocError) {
 
 
-          print('error');
+          if (kDebugMode) {
+            print('error');
+          }
         }
         if (state is AddSubjectBlocLoaded) {
           addSubject = BlocProvider
@@ -302,7 +306,7 @@ class _AddsubjectState extends State<Addsubject> {
                               ),
                             ),
                             filled: true,
-                            fillColor: Color(0xFF0ABC74),
+                            fillColor: const Color(0xFF0ABC74),
                             // Green background color
                             border: OutlineInputBorder(
                                 borderRadius:
@@ -363,7 +367,7 @@ class _AddsubjectState extends State<Addsubject> {
                             ),
                           ),
                           filled: true,
-                          fillColor: Color(0xFF0ABC74),
+                          fillColor: const Color(0xFF0ABC74),
                           // Green background color
                           border: OutlineInputBorder(
                             borderRadius:
@@ -422,7 +426,7 @@ class _AddsubjectState extends State<Addsubject> {
                                   width: 203.w,
                                   height: 53.h,
                                   decoration: ShapeDecoration(
-                                    color: Color(0xFF0ABC74),
+                                    color: const Color(0xFF0ABC74),
                                     shape: RoundedRectangleBorder(
                                       borderRadius:
                                       BorderRadius.circular(
@@ -533,7 +537,7 @@ class _AddsubjectState extends State<Addsubject> {
                                       SizedBox(
                                         width: 30,
                                         height: 40.h,
-                                        child: Icon(
+                                        child: const Icon(
                                             Icons
                                                 .delete_outline_outlined,
                                             color: Colors
@@ -667,7 +671,7 @@ class _AddsubjectState extends State<Addsubject> {
                                                             index); // Remove the file at the specified index
                                                       });
                                                     },
-                                                    child: Icon(
+                                                    child: const Icon(
                                                         Icons
                                                             .delete_outline_outlined,
                                                         color: Colors
@@ -679,12 +683,12 @@ class _AddsubjectState extends State<Addsubject> {
                                           );
                                         }),
                                   )
-                                      : SizedBox(),
+                                      : const SizedBox(),
                                   // If not expanded, show nothing
                                 ],
                               ),
                             )
-                                : SizedBox(),
+                                : const SizedBox(),
                             // If no file is selected, show nothing
                           ]),
                     ],
@@ -699,13 +703,17 @@ class _AddsubjectState extends State<Addsubject> {
                         cursor: SystemMouseCursors.click,
                         child: GestureDetector(
                           onTap: () {
-                            print('pdfsubject'+ _selectedFiles.toString());
+                            if (kDebugMode) {
+                              print('pdfsubject$_selectedFiles');
+                            }
 
 
                             final isValid =
                             formkey.currentState?.validate();
                             if (isValid!) {
-                              print('  api calling pfd taked');
+                              if (kDebugMode) {
+                                print('  api calling pfd taked');
+                              }
                               BlocProvider.of<AddSubjectBloc>(
                                   context)
                                   .add(FeatchAddSubject(
@@ -719,7 +727,9 @@ class _AddsubjectState extends State<Addsubject> {
                                       .text,
                                   status: 'published',
                                   subjectpdf: _selectedFiles!));
-                              print('loadedpdf'+_selectedFiles.toString() );
+                              if (kDebugMode) {
+                                print('loadedpdf$_selectedFiles' );
+                              }
                             }
                             formkey.currentState?.save();
                           },
@@ -727,7 +737,7 @@ class _AddsubjectState extends State<Addsubject> {
                             width: 219.90.w,
                             height: 69.h,
                             decoration: ShapeDecoration(
-                              color: Color(0xFF0ABC74),
+                              color: const Color(0xFF0ABC74),
                               shape: RoundedRectangleBorder(
                                 borderRadius:
                                 BorderRadius.circular(15.r),
@@ -778,7 +788,7 @@ class _AddsubjectState extends State<Addsubject> {
                             width: 167.w,
                             height: 69.h,
                             decoration: ShapeDecoration(
-                              color: Color(0xFF0ABC74),
+                              color: const Color(0xFF0ABC74),
                               shape: RoundedRectangleBorder(
                                 borderRadius:
                                 BorderRadius.circular(15.r),

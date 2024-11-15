@@ -106,7 +106,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(   appBar:AppBar(title:  Center(
+    return Scaffold(  backgroundColor: Colors.white, appBar:AppBar(title:  Center(
         child: Text(
           "DASH BOARD",
           textAlign: TextAlign.center,
@@ -139,7 +139,7 @@ class _HomeState extends State<Home> {
           Expanded(
             flex: 1,
             child: Container(
-              color: Colors.blueGrey.shade50,
+              color:Colors.white,
               child: ListView(
                 children: [
 
@@ -227,7 +227,7 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
-          ),Container(width: 2.w,color: Colors.green,),
+          ),Container(width: 4.w,color: Colors.green,),
           // Dynamic Section: Handling right panel content
           Expanded(
             flex: 5,

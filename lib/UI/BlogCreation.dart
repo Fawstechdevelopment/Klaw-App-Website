@@ -11,7 +11,7 @@ class Blogcreation extends StatefulWidget {
 class _BlogcreationState extends State<Blogcreation> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Text(
           'Blog Creation',
