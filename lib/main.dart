@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:klawapp/Bloc/AddSubject%20Bloc/add_subject_bloc.dart';
-import 'package:klawapp/Bloc/DeleteSubject_Bloc/delete_bloc.dart';
-import 'package:klawapp/Bloc/DraftSubjectBloc/draft_subject_bloc.dart';
+import 'package:klawapp/Bloc/Contact%20Bloc/contact_bloc.dart';
+import 'package:klawapp/Bloc/Editing%20Subject%20Bloc/editing_subject_bloc.dart';
 import 'package:klawapp/Bloc/LoginBloc/login_bloc.dart';
-import 'package:klawapp/Bloc/Published%20Subject%20Bloc/published_subject_bloc.dart';
-import 'package:klawapp/Bloc/ToggleSubject%20Bloc/toggle_suject_bloc.dart';
+import 'package:klawapp/Bloc/Pulished%20Subject%20Bloc/published_bloc.dart';
+import 'package:klawapp/UI/Interface/DashBoard.dart';
+import 'Bloc/DeleteSubject_Bloc/delete_bloc.dart';
+import 'Bloc/DraftSubjectBloc/draft_subject_bloc.dart';
+import 'Bloc/ToggleSubject Bloc/toggle_suject_bloc.dart';
 import 'UI/Authentication/Login.dart';
-import 'dart:html' as html;
+import 'UI/Admin_Adding_Pages/Home.dart';
 
-import 'UI/Home.dart';
-bool draftpage = false;
-bool addSubjectpage = false;
 
 void main() {
   runApp(
-   MyApp());
+    MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+   MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +32,24 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MultiBlocProvider(
           providers: [
+            //Contact
+            BlocProvider(
+              create: (context) => ContactBloc(),
+            ),
+
+
+
+
             BlocProvider(
               create: (context) => LoginBloc(),
             ),
+
+
             BlocProvider(
-              create: (context) => AddSubjectBloc(),
+              create: (context) => PublishedBloc(),
             ),
             BlocProvider(
-              create: (context) => PublishedSubjectBloc(),
+              create: (context) => AddSubjectBloc(),
             ),
             BlocProvider(
               create: (context) => DraftSubjectBloc(),
@@ -46,23 +57,53 @@ class MyApp extends StatelessWidget {
             BlocProvider(
               create: (context) => DeleteBloc(),
             ),
-
+            //
             BlocProvider(
               create: (context) => ToggleSujectBloc(),
             ),
-          ],
-          child: MaterialApp(
-            title: 'Klaw App',
-          home: Login(),
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-              useMaterial3: true,
+
+            BlocProvider(
+              create: (context) => EditingSubjectBloc(),
             ),
 
+          ],
+          child: MaterialApp.router(
+            theme: ThemeData( primarySwatch: Colors.blue,),
+            debugShowCheckedModeBanner: false,
+            routerDelegate: _router.routerDelegate,
+            routeInformationParser: _router.routeInformationParser,
+            routeInformationProvider: _router.routeInformationProvider,
           ),
         );
       },
+
     );
   }
+  final GoRouter _router = GoRouter(
+    initialLocation: '/KlawWebsite/Home', // Start with the Intro Page
+    routes: [
+      GoRoute(
+        path: '/KlawWebsite/:Home',
+        builder: (context, state) {
+          final KLawroute = state.pathParameters['Home'] ?? 'Home';
+          return KlawDashBoard(selectedPage: KLawroute,);
+        },
+      ),
+
+      // Introductory Page
+      GoRoute(
+        path: '/Login',
+        builder: (context, state) => const Login(),
+      ),
+
+      // Parent Page with dynamic routes for headings
+      GoRoute(
+        path: '/parent/:Usage',
+        builder: (context, state) {
+          final heading = state.pathParameters['Usage'] ?? 'Usage';
+          return DashBord(selectedHeading: heading);
+        },
+      ),
+    ],
+  );
 }

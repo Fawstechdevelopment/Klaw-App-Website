@@ -1,16 +1,28 @@
-class DeleteModelClass {
-  DeleteModelClass({
-      this.message,});
 
-  DeleteModelClass.fromJson(dynamic json) {
-    message = json['message'];
+class DeleteModelClass {
+  String? detail;
+
+  DeleteModelClass({this.detail});
+
+  DeleteModelClass.fromJson(Map<String, dynamic> json) {
+    if(json["detail"] is String) {
+      detail = json["detail"];
+    }
   }
-  String? message;
+
+  static List<DeleteModelClass> fromList(List<Map<String, dynamic>> list) {
+    return list.map(DeleteModelClass.fromJson).toList();
+  }
 
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['message'] = message;
-    return map;
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["detail"] = detail;
+    return _data;
   }
 
+  DeleteModelClass copyWith({
+    String? detail,
+  }) => DeleteModelClass(
+    detail: detail ?? this.detail,
+  );
 }

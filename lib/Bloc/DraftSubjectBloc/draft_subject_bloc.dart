@@ -8,7 +8,7 @@ part 'draft_subject_event.dart';
 part 'draft_subject_state.dart';
 
 class DraftSubjectBloc extends Bloc<DraftSubjectEvent, DraftSubjectState> {
-  late DraftSubjectModel draftSubject;
+  late List<DraftSubjectModel> draftSubject;
   AdminApi adminApi = AdminApi();
   DraftSubjectBloc() : super(DraftSubjectInitial()) {
     on<FeatchDraftSubject>((event, emit) async{

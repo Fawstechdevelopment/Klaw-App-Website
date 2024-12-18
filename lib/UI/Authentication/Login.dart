@@ -1,10 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:klawapp/Bloc/LoginBloc/login_bloc.dart';
-import 'package:klawapp/UI/Home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Repository/ModelClass/AdminLoginModelClass.dart';
@@ -18,6 +17,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
   bool passwordVisible = true;
   TextEditingController usernamecontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
@@ -79,15 +79,15 @@ class _LoginState extends State<Login> {
                           width: 500.w,
                           child: Row(
                             children: List.generate(
-                                150 ~/ 5,
-                                (index) => Expanded(
-                                      child: Container(
-                                        color: index % 2 == 0
-                                            ? Colors.transparent
-                                            : const Color(0xFF009357),
-                                        height: 1.9.h,
-                                      ),
-                                    ),),
+                              150 ~/ 5,
+                                  (index) => Expanded(
+                                child: Container(
+                                  color: index % 2 == 0
+                                      ? Colors.transparent
+                                      : const Color(0xFF009357),
+                                  height: 1.9.h,
+                                ),
+                              ),),
                           ),
                         ),
                       ],
@@ -105,7 +105,7 @@ class _LoginState extends State<Login> {
                   decoration: ShapeDecoration(
                     shape: RoundedRectangleBorder(
                       side:
-                          BorderSide(width: 1.w, color: const Color(0xFF009357)),
+                      BorderSide(width: 1.w, color: const Color(0xFF009357)),
                       borderRadius: BorderRadius.circular(20.r),
                     ),
                   ),
@@ -114,15 +114,13 @@ class _LoginState extends State<Login> {
                     child: BlocListener<LoginBloc, LoginState>(
                       listener: (context, state) {
                         if (state is LoginBlocLoading) {
-                          if (kDebugMode) {
-                            print("siginloading");
-                          }
+
 
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return const Center(
-                                child: CircularProgressIndicator(),
+                                child: CircularProgressIndicator(color: Colors.green,),
                               );
                             },
                           );
@@ -130,9 +128,8 @@ class _LoginState extends State<Login> {
                         if (state is LoginBlocError) {
                           Navigator.of(context).pop();
 
-                          if (kDebugMode) {
-                            print('error');
-                          }
+
+
                         }
                         if (state is LoginBlocLoaded) {
                           data =
@@ -140,7 +137,9 @@ class _LoginState extends State<Login> {
                           Navigator.of(context).pop();
                           ToastMessage().toastmessage(message: "Succesfully login");
                           // DashboardHome.instance;
-Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> Home()), (route)=> false);
+
+                          context.go('/parent/Usage');
+
                           checkLogin(data.access.toString());
                         }
                       },
@@ -215,13 +214,13 @@ Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> Home()
                                 suffixIcon: IconButton(
                                   icon: passwordVisible
                                       ? const Icon(
-                                          Icons.visibility_off_outlined,
-                                          color: Color(0xFFA7B0BB),
-                                        )
+                                    Icons.visibility_off_outlined,
+                                    color: Color(0xFFA7B0BB),
+                                  )
                                       : const Icon(
-                                          Icons.visibility,
-                                          color: Color(0xFFA7B0BB),
-                                        ),
+                                    Icons.visibility,
+                                    color: Color(0xFFA7B0BB),
+                                  ),
                                   onPressed: () {
                                     setState(() {
                                       passwordVisible = !passwordVisible;
@@ -239,7 +238,7 @@ Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> Home()
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12.r),
                                   borderSide:
-                                      BorderSide(width: 1.w, color: Colors.black),
+                                  BorderSide(width: 1.w, color: Colors.black),
                                 ),
                               ), validator: (passwordvalue) {
                               if (passwordvalue!.isEmpty || passwordvalue.length < 5) {
@@ -258,12 +257,12 @@ Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> Home()
 
                                 final isValid = formkey.currentState?.validate();
                                 if (isValid!) {
-                                BlocProvider.of<LoginBloc>(context).add(FeatchLogin(
-                                    username: usernamecontroller.text,
-                                    password: passwordcontroller.text));
-                              }
+                                  BlocProvider.of<LoginBloc>(context).add(FeatchLogin(
+                                      username: usernamecontroller.text,
+                                      password: passwordcontroller.text));
+                                }
                                 formkey.currentState?.save();
-                                },
+                              },
                               child: Padding(
                                 padding: EdgeInsets.only(top: 52.h, left: 37.w),
                                 child: Container(

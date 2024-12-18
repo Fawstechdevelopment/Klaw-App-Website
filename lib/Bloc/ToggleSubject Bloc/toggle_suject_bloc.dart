@@ -19,7 +19,6 @@ emit(ToggleBlocLoaded());
       }
 catch(e){
         emit(ToggleBlocError());
-
 }
 
 

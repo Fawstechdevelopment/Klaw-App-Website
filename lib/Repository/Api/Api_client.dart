@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,7 +10,9 @@ class ApiClient {
   Future<Response> invokeAPI(String path, String method, Object? body) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String accestoken= prefs.getString('token')??"";
-    print('admintoken'+accestoken);
+    if (kDebugMode) {
+      print('admin token : $accestoken');
+    }
     Map<String, String> headerParams = {};
     Response response;
 
@@ -17,7 +20,9 @@ class ApiClient {
     print(url);
 
     final nullableHeaderParams = (headerParams.isEmpty) ? null : headerParams;
-    print(body);
+    if (kDebugMode) {
+      print(body);
+    }
     switch (method) {
 
       case "LOGINPOST":
@@ -26,7 +31,6 @@ class ApiClient {
               'Content-Type': 'application/json',
             },
             body: body);
-
         break;
       case "POST":
         response = await post(Uri.parse(url),
@@ -97,14 +101,14 @@ class ApiClient {
         });
     }
 
-    print('status of $path =>' + (response.statusCode).toString());
-    print(response.body);
+    if (kDebugMode) {
+      print('status of $path =>${response.statusCode}');
+    }
+    if (kDebugMode) {
+      print(response.body);
+    }
     if (response.statusCode >= 400) {
-      log(path +
-          ' : ' +
-          response.statusCode.toString() +
-          ' : ' +
-          response.body);
+      log('$path : ${response.statusCode} : ${response.body}');
 
       throw ApiException(_decodeBodyBytes(response), response.statusCode);
     }

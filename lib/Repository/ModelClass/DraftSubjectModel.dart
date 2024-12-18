@@ -1,54 +1,18 @@
 
 class DraftSubjectModel {
-  List<Draft>? draft;
-
-  DraftSubjectModel({this.draft});
-
-  DraftSubjectModel.fromJson(Map<String, dynamic> json) {
-    if(json["draft"] is List) {
-      draft = json["draft"] == null ? null : (json["draft"] as List).map((e) => Draft.fromJson(e)).toList();
-    }
-  }
-
-  static List<DraftSubjectModel> fromList(List<Map<String, dynamic>> list) {
-    return list.map((map) => DraftSubjectModel.fromJson(map)).toList();
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    if(draft != null) {
-      _data["draft"] = draft?.map((e) => e.toJson()).toList();
-    }
-    return _data;
-  }
-
-  DraftSubjectModel copyWith({
-    List<Draft>? draft,
-  }) => DraftSubjectModel(
-    draft: draft ?? this.draft,
-  );
-}
-
-class Draft {
-  String? objectId;
-  String? title;
-  String? courseCode;
+  String? id;
   String? university;
   String? description;
-  String? file;
   String? status;
+  String? title;
+  String? courseCode;
+  String? vectorizedData;
 
-  Draft({this.objectId, this.title, this.courseCode, this.university, this.description, this.file, this.status});
+  DraftSubjectModel({this.id, this.university, this.description, this.status, this.title, this.courseCode, this.vectorizedData});
 
-  Draft.fromJson(Map<String, dynamic> json) {
-    if(json["object_id"] is String) {
-      objectId = json["object_id"];
-    }
-    if(json["title"] is String) {
-      title = json["title"];
-    }
-    if(json["course_code"] is String) {
-      courseCode = json["course_code"];
+  DraftSubjectModel.fromJson(Map<String, dynamic> json) {
+    if(json["_id"] is String) {
+      id = json["_id"];
     }
     if(json["university"] is String) {
       university = json["university"];
@@ -56,45 +20,55 @@ class Draft {
     if(json["description"] is String) {
       description = json["description"];
     }
-    if(json["file"] is String) {
-      file = json["file"];
-    }
     if(json["status"] is String) {
       status = json["status"];
     }
+    if(json["title"] is String) {
+      title = json["title"];
+    }
+    if(json["course_code"] is String) {
+      courseCode = json["course_code"];
+    }
+    if(json["vectorized_data"] is String) {
+      vectorizedData = json["vectorized_data"];
+    }
   }
 
-  static List<Draft> fromList(List<Map<String, dynamic>> list) {
-    return list.map((map) => Draft.fromJson(map)).toList();
+  static List<DraftSubjectModel> fromList(List<Map<String, dynamic>> list) {
+    return list.map(DraftSubjectModel.fromJson).toList();
   }
-
+  static List<DraftSubjectModel> listFromJson(List<dynamic> json) {
+    return json == null
+        ? []
+        : json.map((value) => DraftSubjectModel.fromJson(value)).toList();
+  }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["object_id"] = objectId;
-    _data["title"] = title;
-    _data["course_code"] = courseCode;
+    _data["_id"] = id;
     _data["university"] = university;
     _data["description"] = description;
-    _data["file"] = file;
     _data["status"] = status;
+    _data["title"] = title;
+    _data["course_code"] = courseCode;
+    _data["vectorized_data"] = vectorizedData;
     return _data;
   }
 
-  Draft copyWith({
-    String? objectId,
-    String? title,
-    String? courseCode,
+  DraftSubjectModel copyWith({
+    String? id,
     String? university,
     String? description,
-    String? file,
     String? status,
-  }) => Draft(
-    objectId: objectId ?? this.objectId,
-    title: title ?? this.title,
-    courseCode: courseCode ?? this.courseCode,
+    String? title,
+    String? courseCode,
+    String? vectorizedData,
+  }) => DraftSubjectModel(
+    id: id ?? this.id,
     university: university ?? this.university,
     description: description ?? this.description,
-    file: file ?? this.file,
     status: status ?? this.status,
+    title: title ?? this.title,
+    courseCode: courseCode ?? this.courseCode,
+    vectorizedData: vectorizedData ?? this.vectorizedData,
   );
 }
